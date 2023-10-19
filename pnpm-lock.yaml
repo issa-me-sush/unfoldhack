@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@okto_wallet/okto-connect-sdk':
+    specifier: 0.2.0-alpha.0
+    version: 0.2.0-alpha.0(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
   '@rainbow-me/rainbowkit':
     specifier: ^1.1.2
     version: 1.1.2(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)(viem@1.16.6)(wagmi@1.4.4)
@@ -360,6 +363,39 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@okto_wallet/okto-connect-sdk@0.2.0-alpha.0(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-KFWxoeV+0y+Q0c0ZB50DwbadTKxM0pSfzyoejNLkCiJGRWR4vZ6DABqHSL9pWK9A1iod4hpaSVUnzzsMHW4/6g==}
+    dependencies:
+      '@okto_wallet/okto-wallet-sdk-ui': 0.2.0-alpha.0
+      '@wagmi/chains': 1.8.0(typescript@5.2.2)
+      '@walletconnect/ethereum-provider': 2.10.1(@walletconnect/modal@2.6.2)
+      '@walletconnect/utils': 2.10.1
+      viem: 1.16.6(typescript@5.2.2)
+      wagmi: 1.4.4(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)(viem@1.16.6)
+    transitivePeerDependencies:
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@walletconnect/modal'
+      - bufferutil
+      - encoding
+      - immer
+      - lokijs
+      - react
+      - react-dom
+      - react-native
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@okto_wallet/okto-wallet-sdk-ui@0.2.0-alpha.0:
+    resolution: {integrity: sha512-o6QwN0hmZjEi3IEQIiJdx9Z9VHF3iq1+RgAlM3vuR9uQGwU0VX29iy18dRKOeWpkgi6H8+ZzbzpB6vXyTMZHaw==}
+    dependencies:
+      lit: 2.8.0
+      qr-code-styling: 1.6.0-rc.1
+    dev: false
 
   /@rainbow-me/rainbowkit@1.1.2(@types/react@18.2.30)(react-dom@18.2.0)(react@18.2.0)(viem@1.16.6)(wagmi@1.4.4):
     resolution: {integrity: sha512-yWxKDfHL4xDZJW34APGkmO2SkxjHwrEeAfvx6+137hWLttQwHcalG9nj4II8roYV2/2XJPmQsbEs7TM0rC0fOg==}
@@ -790,6 +826,17 @@ packages:
       '@vanilla-extract/css': ^1.0.0
     dependencies:
       '@vanilla-extract/css': 1.9.1
+    dev: false
+
+  /@wagmi/chains@1.8.0(typescript@5.2.2):
+    resolution: {integrity: sha512-UXo0GF0Cl0+neKC2KAmVAahv8L/5rACbFRRqkDvHMefzY6Fh7yzJd8F4GaGNNG3w4hj8eUB/E3+dEpaTYDN62w==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.2.2
     dev: false
 
   /@wagmi/connectors@3.1.2(@types/react@18.2.30)(react@18.2.0)(typescript@5.2.2)(viem@1.16.6):
@@ -3287,6 +3334,16 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
     dev: true
+
+  /qr-code-styling@1.6.0-rc.1:
+    resolution: {integrity: sha512-ModRIiW6oUnsP18QzrRYZSc/CFKFKIdj7pUs57AEVH20ajlglRpN3HukjHk0UbNMTlKGuaYl7Gt6/O5Gg2NU2Q==}
+    dependencies:
+      qrcode-generator: 1.4.4
+    dev: false
+
+  /qrcode-generator@1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
+    dev: false
 
   /qrcode@1.5.0:
     resolution: {integrity: sha512-9MgRpgVc+/+47dFvQeD6U2s0Z92EsKzcHogtum4QB+UNd025WOJSHvn/hjk9xmzj7Stj95CyUAs31mrjxliEsQ==}
