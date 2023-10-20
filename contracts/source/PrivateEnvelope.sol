@@ -1,4 +1,4 @@
-solidityCopy code
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -36,7 +36,7 @@ contract PrivateRedEnvelope is BalanceManager {
         return currentEnvelopeId;
     }
 
-    function claimPrivateEnvelope(uint256 envelopeId) public {
+    function claimPrivateEnvelope(uint256 envelopeId) public returns (uint256){
         PrivateEnvelope storage envelope = privateEnvelopes[envelopeId];
         require(!envelope.hasClaimed[msg.sender], "Already claimed");
         require(isRecipient(msg.sender, envelopeId), "Not a recipient");
@@ -56,6 +56,7 @@ contract PrivateRedEnvelope is BalanceManager {
         addToBalance(msg.sender, claimableAmount);  // Update recipient balance
 
         emit PrivateEnvelopeClaimed(envelopeId, msg.sender, claimableAmount);
+        return claimableAmount;
     }
 
     function isRecipient(address _addr, uint256 envelopeId) public view returns(bool) {
@@ -72,4 +73,3 @@ contract PrivateRedEnvelope is BalanceManager {
         return uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % total;
     }
 }
-
