@@ -4,37 +4,29 @@ import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col justify-center items-center h-screen" style={{ background: 'linear-gradient(180deg, #4B0082 0%, #000000 100%)' }}>
-      <h1 className="text-4xl font-bold mb-8">Packet Planet</h1>
-      <div className="flex justify-center">
-        <div className="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mr-6">
-          <div className="mb-4">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Envelope</h5>
-            </a>
-          </div>
-          <div className="flex justify-center">
+    <div  style={{ background: 'linear-gradient(to right, #434343 0%, black 100%)' }}>
+      <h1 className='text-8xl flex-shrink font-mono text-slate-200 pt-20 px-10'>Revolutionize gifting with our decentralized<br/> red envelope distribution platform!</h1>
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div className='pb-96'>
+      <div className="flex justify-center ">
+   
+          <div className="flex justify-center px-20">
             <Link href="/create">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ fontFamily: 'Roboto' }}>
-                Create
+              <button className="  text-xl border-gray-400 h-20 w-80 font-mono shadow-2xl bg-opacity-25 rounded-2xl	bg-slate-800 hover:bg-slate-500 text-white font-bold py-2 px-4" >
+                Create your Red Envelope
               </button>
             </Link>
           </div>
-        </div>
+      
 
-        <div className="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ml-6">
-          <div className="mb-4">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Go to Dashboard</h5>
-            </a>
-          </div>
-          <div className="flex justify-center">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ fontFamily: 'Roboto' }}>
-              Go
+        
+            <button className=" h-20 w-80 border-gray-400 text-xl bg-opacity-25 shadow-2xl font-mono bg-slate-800 rounded-2xl	 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded">
+              Dashboard
             </button>
+            
           </div>
-        </div>
-      </div>
+    </div>
+    </div>
     </div>
   );
 };
