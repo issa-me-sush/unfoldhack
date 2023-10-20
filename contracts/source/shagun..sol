@@ -74,4 +74,24 @@ contract PrivateRedEnvelope {
         payable(msg.sender).transfer(amount);
         emit FundsWithdrawn(msg.sender, amount);
     }
+
+    function getReceivedEnvelopes(address user) public view returns (uint256[] memory) {
+    uint256[] memory receivedEnvelopes = new uint256[](currentEnvelopeId);
+    uint256 count = 0;
+    
+    for (uint256 i = 1; i <= currentEnvelopeId; i++) {
+        if (privateEnvelopes[i].hasClaimed[user]) {
+            receivedEnvelopes[count] = i;
+            count++;
+        }
+    }
+
+    // Resize the receivedEnvelopes array to the actual count of received envelopes.
+    assembly {
+        mstore(receivedEnvelopes, count)
+    }
+
+    return receivedEnvelopes;
+}
+
 }
