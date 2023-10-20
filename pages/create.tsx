@@ -24,7 +24,8 @@ const Form = () => {
   };
 
   return (
-    <div className='bg-gradient-to-r from-blue-100 to-blue-200 p-10 rounded-lg shadow-lg max-w-lg mx-auto mt-20'>
+    <div className='h-screen p-60'  style={{ background: 'linear-gradient(to right, #434343 0%, black 100%)' }}    >
+    <div className='bg-gradient-to-r from-blue-100 to-blue-200 p-10 rounded-lg shadow-lg max-w-lg mx-auto'>
       <div className='flex flex-col space-y-4'>
         <h1 className='text-center font-bold text-xl'>
           {checked ? 'Public Envelope' : 'Private Envelope'}
@@ -73,9 +74,9 @@ const Form = () => {
                       updatedArray.splice(index, 1);
                       setAddrArray(updatedArray);
                     }}
-                    className='p-2 bg-red-500 text-white rounded'
+                    className='p-2 bg-red-500 text-white rounded w-10 rounded-xl'
                   >
-                    X
+                    +
                   </button>
                 </li>
               ))}
@@ -91,6 +92,7 @@ const Form = () => {
           <p className='text-center'>we will update soon...</p>
         )}
       </div>
+    </div>
     </div>
   );
 };
