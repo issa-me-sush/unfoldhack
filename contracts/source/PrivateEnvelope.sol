@@ -1,7 +1,10 @@
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract PrivateRedEnvelope {
+import "./BalanceManager.sol";
+
+contract PrivateRedEnvelope is BalanceManager {
     struct PrivateEnvelope {
         string name;
         address payable creator;
@@ -10,17 +13,16 @@ contract PrivateRedEnvelope {
         address payable[] recipients;
         mapping(address => bool) hasClaimed;
     }
-    
+
     uint256 private currentEnvelopeId = 0;
     mapping(uint256 => PrivateEnvelope) public privateEnvelopes;
-    mapping(address => uint256) public userBalances;  // Track user native token credits
 
     event PrivateEnvelopeCreated(uint256 envelopeId, address creator, uint256 amount, string name, address payable[] recipients);
     event PrivateEnvelopeClaimed(uint256 envelopeId, address claimer, uint256 amount);
-    event FundsWithdrawn(address user, uint256 amount);
 
-    function createPrivateEnvelope(string memory _name, address payable[] memory _recipients) public payable {
+    function createPrivateEnvelope(string memory _name, address payable[] memory _recipients) public payable returns (uint256) {
         require(msg.value > 0, "Amount should be greater than zero");
+        addToBalance(msg.sender, msg.value);  // Update balance in BalanceManager
 
         currentEnvelopeId++;
 
@@ -31,14 +33,14 @@ contract PrivateRedEnvelope {
         newEnvelope.recipients = _recipients;
 
         emit PrivateEnvelopeCreated(currentEnvelopeId, msg.sender, msg.value, _name, _recipients);
+        return currentEnvelopeId;
     }
 
-    function claimPrivateEnvelope(uint256 envelopeId) public {
+    function claimPrivateEnvelope(uint256 envelopeId) public returns (uint256){
         PrivateEnvelope storage envelope = privateEnvelopes[envelopeId];
-        
         require(!envelope.hasClaimed[msg.sender], "Already claimed");
         require(isRecipient(msg.sender, envelopeId), "Not a recipient");
-        
+
         uint256 claimableAmount;
         if (envelope.claimedCount < envelope.recipients.length - 1) {
             claimableAmount = randomAmount(envelope.totalAmount);
@@ -46,12 +48,15 @@ contract PrivateRedEnvelope {
         } else {
             claimableAmount = envelope.totalAmount;
         }
-        
+
         envelope.claimedCount++;
         envelope.hasClaimed[msg.sender] = true;
-        
-        userBalances[msg.sender] += claimableAmount;  // Update user's native token credits
+
+        subtractFromBalance(envelope.creator, claimableAmount);  // Update balance in BalanceManager
+        addToBalance(msg.sender, claimableAmount);  // Update recipient balance
+
         emit PrivateEnvelopeClaimed(envelopeId, msg.sender, claimableAmount);
+        return claimableAmount;
     }
 
     function isRecipient(address _addr, uint256 envelopeId) public view returns(bool) {
@@ -63,35 +68,8 @@ contract PrivateRedEnvelope {
         }
         return false;
     }
-    
+
     function randomAmount(uint256 total) internal view returns(uint256) {
         return uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % total;
     }
-
-    function withdraw(uint256 amount) public {
-        require(userBalances[msg.sender] >= amount, "Insufficient funds");
-        userBalances[msg.sender] -= amount;
-        payable(msg.sender).transfer(amount);
-        emit FundsWithdrawn(msg.sender, amount);
-    }
-
-    function getReceivedEnvelopes(address user) public view returns (uint256[] memory) {
-    uint256[] memory receivedEnvelopes = new uint256[](currentEnvelopeId);
-    uint256 count = 0;
-    
-    for (uint256 i = 1; i <= currentEnvelopeId; i++) {
-        if (privateEnvelopes[i].hasClaimed[user]) {
-            receivedEnvelopes[count] = i;
-            count++;
-        }
-    }
-
-    // Resize the receivedEnvelopes array to the actual count of received envelopes.
-    assembly {
-        mstore(receivedEnvelopes, count)
-    }
-
-    return receivedEnvelopes;
-}
-
 }
