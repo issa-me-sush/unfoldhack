@@ -66,7 +66,57 @@
   }
 }
 
- 
+
+.mainnav{
+  display: flex;
+  justify-content:center ;
+  color: white;
+  align-items: center;
+  border-bottom: 5px solid black;
+  background-color: black;
+  padding: 2px;
+  
+}
+.sidenav{
+  display: flex;
+  text-indent: 30px;
+  list-style-type: none;
+}
+body{
+  background-color: #202020	;
+}
+li{
+  text-decoration: black;
+}
+.one{
+  color: white;
+  text-decoration: none;
+  font-weight: 200;
+}
+.containerlisting{
+  width:500px;
+  height: 250px;
+  border: 5px solid black;
+  display:flexbox;
+  flex-direction: row-reverse;
+  text-indent: 40px;  
+  margin: 50px;
+  border-radius: 10px;
+}
+.containerlisting h1{
+  font-size: 45px;
+  font-family: 'Poppins', sans-serif;
+
+
+}
+.mainlisting{
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  margin: 20px;
+  
+}
 @layer base {
   * {
     @apply border-border;

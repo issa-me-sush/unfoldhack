@@ -20,9 +20,13 @@ const Home: NextPage = () => {
                 </button>
               </Link>
             </div>
+            <Link href="/listingmain">
+
             <button className="h-20 w-80 border-gray-400 text-xl bg-opacity-25 shadow-2xl font-mono bg-slate-800 rounded-2xl hover:bg-slate-500 text-white font-bold py-2 px-4 rounded">
               Dashboard
             </button>
+            </Link>
+
           </div>
         </div>
       </div>
