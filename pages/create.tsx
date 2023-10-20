@@ -22,10 +22,14 @@ const Form = () => {
   const handleAddAddress = () => {
     setAddrArray([...addrarray, '']);
   };
+  function onSubmit(e:any){
+    e.preventDefault();
+    console.log(addrarray);
+  }
 
   return (
     <div className='h-screen p-60'  style={{ background: 'linear-gradient(to right, #434343 0%, black 100%)' }}    >
-    <div className='bg-gradient-to-r from-blue-100 to-blue-200 p-10 rounded-lg shadow-lg max-w-lg mx-auto'>
+    <div className='bg-gradient-to-r bg-slate-600 bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg mx-auto font-mono'>
       <div className='flex flex-col space-y-4'>
         <h1 className='text-center font-bold text-xl'>
           {checked ? 'Public Envelope' : 'Private Envelope'}
@@ -40,15 +44,16 @@ const Form = () => {
           <span className='slider round'></span>
         </label>
         <div className='flex flex-col space-y-2'>
-          <h3>Enter the Name of the Red Envelope</h3>
+          <h3 className='text-white'>Enter the Name of the Red Envelope</h3>
           <Input
             onChange={(e) => setName(e.target.value)}
             placeholder='Satoshi Nakamoto'
             className='p-2 border rounded'
           />
         </div>
-        <div className='flex flex-col space-y-2'>
-          <h3>Enter Bounty Value</h3>
+        <div className='flex flex-col space-y-2 text-white'>
+          <h3>Enter Bounty Value</h3>-
+          
           <Input
             onChange={(e) => setBounty(e.target.value)}
             placeholder='$ 1000'
@@ -57,7 +62,7 @@ const Form = () => {
           />
         </div>
         {!checked ? (
-          <div className='flex flex-col space-y-2'>
+          <div className='flex flex-col space-y-2 text-white'>
             <h3>Enter the Receiver address</h3>
             <ul className='space-y-2'>
               {addrarray.map((address, index) => (
@@ -66,7 +71,8 @@ const Form = () => {
                     value={address}
                     placeholder='0x588797393fu8393209'
                     onChange={(e) => handleAddressChange(index, e.target.value)}
-                    className='p-2 border rounded flex-grow'
+                    className='p-2 border rounded flex-grow text-black'
+                    
                   />
                   <button
                     onClick={() => {
@@ -76,7 +82,7 @@ const Form = () => {
                     }}
                     className='p-2 bg-red-500 text-white rounded w-10 rounded-xl'
                   >
-                    +
+                    x
                   </button>
                 </li>
               ))}
@@ -90,7 +96,8 @@ const Form = () => {
           </div>
         ) : (
           <p className='text-center'>we will update soon...</p>
-        )}
+        )} 
+        <button className='p-2 bg-zinc-300 text-black rounded-xl m-32' onClick={(e)=>onSubmit(e)}> Submit</button>
       </div>
     </div>
     </div>
