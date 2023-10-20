@@ -4,6 +4,10 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background-color: #101010	;
+    color: white;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 }
 
 a {
@@ -14,6 +18,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @tailwind base;
 @tailwind components;
