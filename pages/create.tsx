@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '../components/ui/input';
 import { ethers } from 'ethers';
-import {PUBCONTRACT ,PUBABI}from "../contracts/abi"
+import {PRIVCONTRACT ,PRIVABI}from "../contracts/abi"
 import { sign } from 'crypto';
+import { useAccount } from 'wagmi';
 const Form = () => {
   const [checked, setChecked] = useState(false);
   const [addrarray, setAddrArray] = useState(['']);
@@ -10,16 +11,53 @@ const Form = () => {
   const [name, setName] = useState('');
   const [maximumbounty, setMaximumBounty] = useState(null);
   const [bounty, setBounty] = useState(null);
+ const {isConnected ,address} = useAccount();
 
 
+//     const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
+//     const signer = provider.getSigner();
+// //   @ts-ignore
+// const contract = new ethers.Contract(PRIVCONTRACT,PRIVABI,signer);
 
-    const provider = new ethers.providers.JsonRpcProvider('https://avalanche-fuji-c-chain.publicnode.com');
-//   @ts-ignore
-const contract = new ethers.Contract(PUBCONTRACT,PUBABI,provider);
+const [contract, setContract] = useState(null);
+
+useEffect(() => {
+    // @ts-ignore 
+  if (typeof window.ethereum !== 'undefined') {
+      // Create a Web3Provider, which wraps the Ethereum-compatible JavaScript object
+    //   @ts-ignore 
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      // Request the user's accounts
+    //   @ts-ignore 
+      window.ethereum.request({ method: 'eth_requestAccounts' }).then(() => {
+          // Get the signer
+          const signer = provider.getSigner();
+
+          // Now use the signer to interact with the contract
+          const contractInstance = new ethers.Contract(PRIVCONTRACT, PRIVABI, signer);
+
+          // Update state with the contract instance
+        //   @ts-ignore 
+          setContract(contractInstance);
+          
+          // Now you can call methods on `contract` to interact with your smart contract.
+        //   @ts-ignore 
+      }).catch(error => {
+          console.error('User denied account access');
+      });
+  } else {
+      console.error('No Ethereum-compatible browser detected');
+  }
+}, []); 
 
 async function fetchConstant() {
-    const creatorRewardPercentage = await contract.CREATOR_REWARD_PERCENTAGE();
+    // @ts-ignore 
+    if(contract){
+        // @ts-ignore 
+    const creatorRewardPercentage = await contract.privateEnvelopes(0);
     console.log('Creator Reward Percentage:', creatorRewardPercentage.toString());
+}
   }
   
   fetchConstant();
@@ -41,9 +79,24 @@ async function fetchConstant() {
   async function onSubmit(e:any){
     e.preventDefault();
     // @ts-ignore
-
-    await contract.createPrivateEnvelope(name,addrarray);
-    console.log(bounty);
+    try {
+    // @ts-ignore 
+        const valueToSend = ethers.utils.parseEther(bounty);  // Sending 1 ether
+    
+        // Send transaction
+        // @ts-ignore 
+        const tx = await contract.createPrivateEnvelope(name, addrarray, { value: valueToSend });
+        console.log('Transaction sent:', tx.hash);
+    
+        // Wait for transaction to be mined
+        const receipt = await tx.wait();
+        console.log('Transaction confirmed');
+     // @ts-ignore 
+         const currentid = await contract.currentEnvelopeId();
+         console.log(currentid)
+      } catch (error) {
+        console.error('Error:', error);
+      }
   }
 
   return (
