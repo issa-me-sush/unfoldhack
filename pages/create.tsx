@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '../components/ui/input';
 import { ethers } from 'ethers';
-import {abi} from '../contracts/abi'
+import {PUBCONTRACT ,PUBABI}from "../contracts/abi"
 import { sign } from 'crypto';
 const Form = () => {
   const [checked, setChecked] = useState(false);
@@ -10,18 +10,20 @@ const Form = () => {
   const [name, setName] = useState('');
   const [maximumbounty, setMaximumBounty] = useState(null);
   const [bounty, setBounty] = useState(null);
-  const [contract,setcontract]=useState();
-  const con_address = process.env.NEXT_PUBLIC_CONTRACT
-  useEffect(()=>{
+
+
+
     const provider = new ethers.providers.JsonRpcProvider('https://avalanche-fuji-c-chain.publicnode.com');
-    const signer =  provider.getSigner();
-    console.log(signer);
-        // @ts-ignore
+//   @ts-ignore
+const contract = new ethers.Contract(PUBCONTRACT,PUBABI,provider);
 
-    setcontract(new ethers.Contract(con_address,abi,signer));
+async function fetchConstant() {
+    const creatorRewardPercentage = await contract.CREATOR_REWARD_PERCENTAGE();
+    console.log('Creator Reward Percentage:', creatorRewardPercentage.toString());
+  }
+  
+  fetchConstant();
 
-
-  })
 
   const handleCheckboxChange = () => {
     setChecked(!checked);
@@ -72,6 +74,7 @@ const Form = () => {
           <h3>Enter Bounty Value</h3>-
           
           <Input
+        //   @ts-ignore
             onChange={(e) => setBounty(e.target.value)}
             placeholder='$ 1000'
             className='p-2 border rounded text-black'
