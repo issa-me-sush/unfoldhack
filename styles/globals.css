@@ -83,7 +83,7 @@
   list-style-type: none;
 }
 body{
-  background-color: #202020	;
+  background: linear-gradient(to right, #FFFAE5, #87ceeb);
 }
 li{
   text-decoration: black;

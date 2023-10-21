@@ -109,12 +109,22 @@ function privenv() {
       )
       
   return (
-    <div className='bg-white text-white flex flex-col gap-[2rem]'>
-        envelope id : {id}{mounted?(isConnected?"connected":"disconnected"):"not mounted"}
+    <div className=' text-white flex flex-col gap-[2rem] justify-center items-center h-auto p-[2rem]' style={{ background: 'linear-gradient(to right, #FFFAE5, #87ceeb)' }} >
+    {/* envelope id : {id} {mounted ? (isConnected ? "connected" : "disconnected") : "not mounted"} */}
+    
+    {!claimAmt && <button onClick={claimEnvelope} className='p-2 bg-blue-500 text-black rounded-xl w-[30%]'>claim</button>}
+    
+    <div className=" w-60 h-auto">
+    {claimAmt ? (
+            <div  className="w-16 h-16 rounded-full bg-gradient-to-br from-white to-gray-200 flex items-center justify-center mb-1">
+               {`your claim amount:`} {claimAmt } 
+            </div>
+           
+        ):<div></div>}
+        <img src={claimAmt ? "/envopen.png" : "/envclose.png"} width="60%" height="10%" className="w-full"  />
         
-        <button onClick={claimEnvelope}>claim</button>
-        {claimAmt?claimAmt:"-"}
     </div>
+</div>
   )
 }
 

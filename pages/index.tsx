@@ -5,11 +5,11 @@ import Link from 'next/link';
 const Home: NextPage = () => {
   return (
     <div style={{ background: 'linear-gradient(to right, #FFFAE5, #87ceeb)' }}>
-      <h1 className='text-8xl flex-shrink font-mono text-slate-200 pt-20 px-10'>
+      {/* <h1 className='text-8xl flex-shrink font-mono text-slate-200 pt-20 px-10'>
         <a href="https://www.fontspace.com/category/hindi">
           <img src="https://see.fontimg.com/api/renderfont4/Gg5D/eyJyIjoiZnMiLCJoIjo2NSwidyI6MTAwMCwiZnMiOjY1LCJmZ2MiOiIjMDAwMDAwIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/RS1TaGFndW4/samarkan-normal.png" alt="Hindi fonts" />
         </a>
-      </h1>
+      </h1> */}
       <div className="flex flex-col justify-center items-center h-screen">
         <div className='pb-96'>
           <div className="flex justify-center ">
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
             <Link href="/listingmain">
 
             <button className="h-20 w-80 border-gray-400 text-xl bg-opacity-25 shadow-2xl font-mono bg-slate-800 rounded-2xl hover:bg-slate-500 text-white font-bold py-2 px-4 rounded">
-              Dashboard
+             Play Shagun Games
             </button>
             </Link>
 
