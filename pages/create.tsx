@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '../components/ui/input';
 import { ethers } from 'ethers';
-import {PRIVCONTRACT ,PRIVABI}from "../contracts/abi"
+import {PRIVCONTRACT ,PRIVABI,PUBABI,PUBCONTRACT}from "../contracts/abi"
 import { sign } from 'crypto';
 import { useAccount } from 'wagmi';
 const Form = () => {
@@ -12,6 +12,7 @@ const Form = () => {
   const [maximumbounty, setMaximumBounty] = useState(null);
   const [bounty, setBounty] = useState(null);
  const {isConnected ,address} = useAccount();
+ const [entryfee,setentryfee]= useState(null);
 
 
 //     const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
@@ -20,6 +21,7 @@ const Form = () => {
 // const contract = new ethers.Contract(PRIVCONTRACT,PRIVABI,signer);
 
 const [contract, setContract] = useState(null);
+const[contract2,setContract2]=useState(null);
 
 useEffect(() => {
     // @ts-ignore 
@@ -36,10 +38,14 @@ useEffect(() => {
 
           // Now use the signer to interact with the contract
           const contractInstance = new ethers.Contract(PRIVCONTRACT, PRIVABI, signer);
+          const contractInstance2 = new ethers.Contract(PUBCONTRACT,PUBABI,signer);
 
           // Update state with the contract instance
         //   @ts-ignore 
           setContract(contractInstance);
+                  //   @ts-ignore 
+
+          setContract2(contractInstance2);
           
           // Now you can call methods on `contract` to interact with your smart contract.
         //   @ts-ignore 
@@ -76,9 +82,11 @@ async function fetchConstant() {
   const handleAddAddress = () => {
     setAddrArray([...addrarray, '']);
   };
+
   async function onSubmit(e:any){
     e.preventDefault();
     // @ts-ignore
+    if(!checked){
     try {
     // @ts-ignore 
         const valueToSend = ethers.utils.parseEther(bounty);  // Sending 1 ether
@@ -96,10 +104,25 @@ async function fetchConstant() {
          const currentid = await contract.currentEnvelopeId();
          console.log(currentid)
 //   @ts-ignore 
-         window.alert(`your envelope claim link for all the recipients: localhost:3000/privenvelopes/`+ parseInt( currentid._hex ,16 ));
+         window.alert(`your envelope claim link for all the recipients: localhost:3000/privenvelopes/+ parseInt( currentid._hex ,16 )`);
       } catch (error) {
         console.error('Error:', error);
       }
+    }else{
+      try{
+          // @ts-ignore 
+
+      const valuetosend = ethers.utils.parseEther(bounty);
+              // @ts-ignore 
+
+      const tx = await contract2.createPublicEnvelope(name,ethers.utils.parseEther(entryfee),valuetosend,{ value : valuetosend });
+      console.log('Transaction successfull',tx.hash);
+      }catch(err){
+        console.log(err);
+      }
+
+
+    }
   }
 
   return (
@@ -179,7 +202,11 @@ async function fetchConstant() {
             </button>
           </div>
         ) : (
-          <p className='text-center'>we will update soon...</p>
+          <div >
+            <h3 className='text-white'>Enter the entry fees</h3>
+          {/* @ts-ignore */}
+          <input placeholder="1 avax" className='p-2 border rounded flex-grow text-black mt-3' onChange={(e)=>{setentryfee(e.target.value)}}></input>
+          </div>
         )} 
         <button className='p-2 bg-zinc-300 text-black rounded-xl m-32' onClick={(e)=>onSubmit(e)}> Submit</button>
       </div>
