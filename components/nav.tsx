@@ -42,7 +42,7 @@ if(address )
         
       </h1>:""}
       </Link>   
-        <div className='flex flex-row gap-[1rem] '>
+        <div className='flex flex-row gap-[1rem]   '>
           <div className='text-center'>credits:{credits != null ?credits:"-"}</div>
         <ConnectButton chainStatus="icon"/>
         </div>

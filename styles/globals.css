@@ -260,7 +260,7 @@
 	transition: .3s ease-in;
  }
 
-@keyframes flipOpen{
+/* @keyframes flipOpen{
 	0%{
 		transform: rotateX(0deg);
 		transform-origin:center top;
@@ -279,8 +279,8 @@
 		transform:rotateX(0deg);
 		transform-origin:center top;
 	  }
-  }
-button{
+  } */
+/* .buttondis{
 	color:#ddd;
 	font-size:18px;
 	font-weight: 600;
@@ -292,8 +292,8 @@ button{
 	border:none;
 	letter-spacing: 1px;
 	background: #ff0004;
-}
-button:hover{
+} */
+/* button:hover{
 	cursor:pointer;
 }
 button:focus{
@@ -336,7 +336,7 @@ margin: 100px auto;
 height: 4px;
 background-color:#666;
 border: 0px;
-}
+} */
 
 
 
@@ -369,12 +369,18 @@ li{
 .containerlisting{
   width:500px;
   height: 350px;
-  border: 5px solid black;
+  border: 0px solid black;
   display:flexbox;
   flex-direction: row-reverse;
   text-indent: 40px;  
   margin: 50px;
   border-radius: 10px;
+  background: linear-gradient(rgba(0, 0, 150, 0.2), rgba(0, 0, 50, 0.3)), rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);
+}
+
+.containerlisting:hover {
+  transform: scale(1.05); /* Scales the card by 5% on hover */
 }
 .containerlisting h1{
   font-size: 45px;

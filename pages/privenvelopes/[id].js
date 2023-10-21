@@ -6,7 +6,7 @@ import { useIsMounted } from '../../hooks/useIsMounted';
 import { ethers } from 'ethers';
 import {PRIVCONTRACT ,PRIVABI} from "../../contracts/abi"
 
-function privenv() {
+function Privenv() {
     const router = useRouter();
     const [conn,setConn] = useState(false);
     const [loading,setLoading] = useState(true);
@@ -128,4 +128,4 @@ function privenv() {
   )
 }
 
-export default privenv
+export default Privenv

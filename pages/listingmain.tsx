@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { useState,useEffect } from 'react';
 
 
-const listingmain = () => {
+const Listingmain = () => {
     const [contract2,setcontract2]=useState(null);
     const [envelopes, setEnvelopes] = useState([]);
     const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
@@ -97,17 +97,17 @@ const listingmain = () => {
       }
   return (
     <div>
-    <h1>List of Envelopes</h1>
+    <p className='text-[30px] text-center'>List of Envelopes</p>
 
       <div className='mainlisting'>
 
-        {envelopes.map((envelope) => (
+        {envelopes.map((envelope, index) => (
                     // @ts-ignore
-            <div className='containerlisting'>
+            <div className='containerlisting' key={index}>
 
                             {/* @ts-ignore */}
 
-            <h1>{envelope.name.toString()}</h1>
+            <p className='text-[40px] text-center'>{envelope.name.toString()}</p>
                         {/* @ts-ignore */}
 
             <h2>Base Bounty {ethers.utils.formatEther(envelope.potSize.toString())} Avax</h2>
@@ -119,11 +119,11 @@ const listingmain = () => {
             <div className='pb-2'>
                                                                         {/* @ts-ignore */}
 
-            <button className=' bg-zinc-300 text-black rounded-xl ml-40 'onClick={(e)=>{handlesubmit(e,envelope.id,envelope.entryFee)}} > Submit</button>
+            <button className=' bg-zinc-300 text-black rounded-xl ml-40 p-[0.3rem] 'onClick={(e)=>{handlesubmit(e,envelope.id,envelope.entryFee)}} > Submit</button>
             </div>
                                                                     {/* @ts-ignore */}
 
-            <button className=' bg-red text-white rounded-xl w-max' onClick={(e)=>{distribute(e,envelope.id)}} >Distribute your Rewards from the Envelope</button>
+            <button className=' bg-red-500 text-white rounded-xl w-max  self-center p-[1rem]' onClick={(e)=>{distribute(e,envelope.id)}} >Distribute your Rewards from the Envelope</button>
 
             </div>
 
@@ -137,4 +137,4 @@ const listingmain = () => {
   )
 }
 
-export default listingmain
+export default Listingmain
