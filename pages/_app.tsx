@@ -13,18 +13,15 @@ import {
   polygon,
   base,
   zora,
+  avalancheFuji,
 } from 'wagmi/chains';
+import Nav from '@/components/nav';
 import { publicProvider } from 'wagmi/providers/public';
 const projectId = "bbc302f89a722c69f043215565e5bf08"
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+   avalancheFuji,
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli,avalancheFuji] : []),
   ],
   [publicProvider()]
 );
@@ -69,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
+        <Nav/>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>

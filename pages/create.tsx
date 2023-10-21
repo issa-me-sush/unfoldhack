@@ -91,9 +91,12 @@ async function fetchConstant() {
         // Wait for transaction to be mined
         const receipt = await tx.wait();
         console.log('Transaction confirmed');
+
      // @ts-ignore 
          const currentid = await contract.currentEnvelopeId();
          console.log(currentid)
+//   @ts-ignore 
+         window.alert(`your envelope claim link for all the recipients: localhost:3000/privenvelopes/`+ parseInt( currentid._hex ,16 ));
       } catch (error) {
         console.error('Error:', error);
       }
