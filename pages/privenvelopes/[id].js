@@ -116,7 +116,7 @@ function Privenv() {
     
     <div className=" w-60 h-auto">
     {claimAmt ? (
-            <div  className="w-16 h-16 rounded-full bg-gradient-to-br from-white to-gray-200 flex items-center justify-center mb-1">
+            <div  className="w-16 h-16 rounded-full bg-gradient-to-br from-white to-gray-200 flex items-center justify-center mb-1 text-black">
                {`your claim amount:`} {claimAmt } 
             </div>
            
