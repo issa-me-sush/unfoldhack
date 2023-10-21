@@ -89,7 +89,7 @@ const Listingmain = () => {
         e.preventDefault();
         try{
                    //   @ts-ignore 
-        contract2.distributeRewards(id,{gasLimit: 21000})
+        contract2.distributeRewards(id)
         }catch(error){
             alert("You are not authrouzied to Distribute this particular reward")
         }
