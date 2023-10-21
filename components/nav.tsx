@@ -11,7 +11,7 @@ function Nav() {
   const mounted = useIsMounted();
   const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
   const contract = new ethers.Contract(PRIVCONTRACT,PRIVABI,provider);
-  const contractpub = new ethers.Contract(PRIVCONTRACT,PRIVABI,provider);
+  const contractpub = new ethers.Contract(PUBCONTRACT,PUBABI,provider);
   const [credits,setCredits] = useState(null)
   const [creditsPub,setCreditsPub] = useState(null)
   useEffect(() => {
