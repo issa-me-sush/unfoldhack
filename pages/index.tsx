@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
-    <div style={{ background: 'linear-gradient(to right, #434343 0%, black 100%)' }}>
+    <div style={{ background: 'linear-gradient(to right, #FFFAE5, #87ceeb)' }}>
       <h1 className='text-8xl flex-shrink font-mono text-slate-200 pt-20 px-10'>
         <a href="https://www.fontspace.com/category/hindi">
           <img src="https://see.fontimg.com/api/renderfont4/Gg5D/eyJyIjoiZnMiLCJoIjo2NSwidyI6MTAwMCwiZnMiOjY1LCJmZ2MiOiIjMDAwMDAwIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/RS1TaGFndW4/samarkan-normal.png" alt="Hindi fonts" />
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
             <div className="flex justify-center px-20">
               <Link href="/create">
                 <button className="text-xl border-gray-400 h-20 w-80 font-mono shadow-2xl bg-opacity-25 rounded-2xl bg-slate-800 hover:bg-slate-500 text-white font-bold py-2 px-4">
-                  Create your Red Envelope
+                  Send E-Shagun
                 </button>
               </Link>
             </div>

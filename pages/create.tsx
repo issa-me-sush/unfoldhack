@@ -103,23 +103,30 @@ async function fetchConstant() {
   }
 
   return (
-    <div className='h-screen p-60'  style={{ background: 'linear-gradient(to right, #434343 0%, black 100%)' }}    >
+    <div className='h-screen p-60'  style={{ background: 'linear-gradient(to right, #FFFAE5, #87ceeb)' }}    >
     <div className='bg-gradient-to-r bg-slate-600 bg-opacity-30 p-10 rounded-lg shadow-lg max-w-lg mx-auto font-mono'>
       <div className='flex flex-col space-y-4'>
         <h1 className='text-center font-bold text-xl'>
-          {checked ? 'Public Envelope' : 'Private Envelope'}
+          {checked ? 'Shagun Game' : 'E-Shagun'}
         </h1>
-        <label className='flex items-center space-x-2'>
-          <Input
-            checked={checked}
-            onChange={handleCheckboxChange}
-            type='checkbox'
-            className='rounded'
-          />
-          <span className='slider round'></span>
-        </label>
+        <label className="flex items-center cursor-pointer">
+  <input
+    type="checkbox"
+    className="hidden"
+    checked={checked}
+    onChange={handleCheckboxChange}
+  />
+  <div className="w-10 h-5 bg-gray-300 rounded-full relative">
+    <span
+      className={`${
+        checked ? "bg-blue-500 translate-x-5" : "bg-gray-500"
+      } block w-5 h-5 rounded-full absolute top-0 left-0 transition-transform duration-200`}
+    ></span>
+  </div>
+</label>
+
         <div className='flex flex-col space-y-2'>
-          <h3 className='text-white'>Enter the Name of the Red Envelope</h3>
+          <h3 className='text-white'>Name Your E-Shagun</h3>
           <Input
             onChange={(e) => setName(e.target.value)}
             placeholder='Satoshi Nakamoto'
@@ -127,7 +134,7 @@ async function fetchConstant() {
           />
         </div>
         <div className='flex flex-col space-y-2 text-white'>
-          <h3>Enter Bounty Value</h3>-
+          <h3>Amount</h3>
           
           <Input
         //   @ts-ignore
