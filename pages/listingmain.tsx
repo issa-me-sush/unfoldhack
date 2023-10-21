@@ -1,59 +1,139 @@
 import React from 'react'
+import {PUBCONTRACT ,PUBABI} from "../contracts/abi"
+import { ethers } from 'ethers';
+import { useState,useEffect } from 'react';
+
 
 const listingmain = () => {
-    const obj =[
-        {
-            id:1,
-            maximum_amt:10000,
-            minentry_amt:10,
-            redenvelope_name:'Diwali-Gift'
+    const [contract2,setcontract2]=useState(null);
+    const [envelopes, setEnvelopes] = useState([]);
+    const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
+    const contract = new ethers.Contract(PUBCONTRACT,PUBABI,provider);
 
-        },
-        {
-            id:2,
-            maximum_amt:50000,
-            minentry_amt:50,
-            redenvelope_name:'Christmas-Gift'
+    const fetchEnvelopes = async () => {
+      try {
+        
+  
+        // Call the getAllEnvelopes function
+        const result = await contract.getAllEnvelopes();
+        console.log(result);
+  
+        // Unpack the result into arrays
+        const ids = result[0];
+        const names = result[1];
+        const potSizes = result[2];
+        const entryFees = result[3];
+  
+        // Combine the data into an array of objects
+        // @ts-ignore
+        const envelopeData = ids.map((id, index) => ({
+          id: id,
+          name: names[index],
+          potSize: potSizes[index],
+          entryFee: entryFees[index],
+        }));
+  
+        setEnvelopes(envelopeData);
+      } catch (error) {
+        console.error('Error fetching data from the smart contract:', error);
+      }
+    };
+    useEffect(() => {
+                      //   @ts-ignore 
 
-        },
-        {
-            id:1,
-            maximum_amt:10000,
-            minentry_amt:10,
-            redenvelope_name:'Diwali-Gift'
+        if (typeof window.ethereum !== 'undefined') {
+            // Create a Web3Provider, which wraps the Ethereum-compatible JavaScript object
+          //   @ts-ignore 
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+      
+            // Request the user's accounts
+          //   @ts-ignore 
+            window.ethereum.request({ method: 'eth_requestAccounts' }).then(() => {
+                // Get the signer
+                const signer = provider.getSigner();
+      
+                // Now use the signer to interact with the contract
+                const contractInstance = new ethers.Contract(PUBCONTRACT, PUBABI, signer);
+                              //   @ts-ignore 
 
-        },
-        {
-            id:2,
-            maximum_amt:50000,
-            minentry_amt:50,
-            redenvelope_name:'Christmas-Gift'
+                setcontract2(contractInstance);
+                
+                // Now you can call methods on `contract` to interact with your smart contract.
+              //   @ts-ignore 
+            }).catch(error => {
+                console.error('User denied account access');
+            });
+        } else {
+            console.error('No Ethereum-compatible browser detected');
+        }
+        fetchEnvelopes();
+        
+      }, []);
+                              {/* @ts-ignore */}
 
-        },
-        {
-            id:1,
-            maximum_amt:10000,
-            minentry_amt:10,
-            redenvelope_name:'Diwali-Gift'
+      const handlesubmit = async(e: any,idnew,fee) =>{
+        e.preventDefault();
+        try{
+                          //   @ts-ignore 
 
+            await contract2.enterEnvelope(idnew, {value: fee});
+        }catch(error){
+            console.log(error);
+        }
+
+     
+      }
+                                //   @ts-ignore 
+
+      async function distribute(e:any,id) {
+        e.preventDefault();
+        try{
+                   //   @ts-ignore 
+        contract2.distributeRewards(id,{gasLimit: 21000})
+        }catch(error){
+            alert("You are not authrouzied to Distribute this particular reward")
         }
         
-    ]
+      }
   return (
-    <div className='mainlisting'>
-        {obj.map(details=>{
-            return(
+    <div>
+    <h1>List of Envelopes</h1>
 
+      <div className='mainlisting'>
+
+        {envelopes.map((envelope) => (
+                    // @ts-ignore
             <div className='containerlisting'>
-                <h1>{details.redenvelope_name}</h1>
-                <h2>Total Bounty ${details.maximum_amt}</h2>
-                <h3>Entry Fee ${details.minentry_amt}</h3>
+
+                            {/* @ts-ignore */}
+
+            <h1>{envelope.name.toString()}</h1>
+                        {/* @ts-ignore */}
+
+            <h2>Base Bounty {ethers.utils.formatEther(envelope.potSize.toString())} Avax</h2>
+                        {/* @ts-ignore */}
+
+            <h2>Entry Fee {ethers.utils.formatEther(envelope.entryFee.toString())} Avax</h2>
+            <div className='flex flex-col align-middle justify-center pt-5'>
+                                                        {/* @ts-ignore */}
+            <div className='pb-2'>
+                                                                        {/* @ts-ignore */}
+
+            <button className=' bg-zinc-300 text-black rounded-xl ml-40 'onClick={(e)=>{handlesubmit(e,envelope.id,envelope.entryFee)}} > Submit</button>
+            </div>
+                                                                    {/* @ts-ignore */}
+
+            <button className=' bg-red text-white rounded-xl w-max' onClick={(e)=>{distribute(e,envelope.id)}} >Distribute your Rewards from the Envelope</button>
 
             </div>
-            )
-        })}
 
-    </div>
+            </div>
+            
+        ))}
+
+      </div>
+    
+  </div>
   )
 }
 
