@@ -7,7 +7,7 @@ const index = () => {
   const { user,id } = router.query;
 
   return (
-    <div>
+    <div className='h-auto w-full'>
       {user}
       {id}
     </div>
