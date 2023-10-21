@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { BMCONTRACT,BMABI } from '@/contracts/abi';
+import { BMCONTRACT,BMABI ,PRIVABI,PRIVCONTRACT,PUBCONTRACT,PUBABI} from '@/contracts/abi';
 import { ethers } from 'ethers';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -10,18 +10,23 @@ function Nav() {
   const {isConnected,address} = useAccount();
   const mounted = useIsMounted();
   const provider = new ethers.providers.JsonRpcProvider('https://api.avax-test.network/ext/bc/C/rpc');
-  const contract = new ethers.Contract(BMCONTRACT,BMABI,provider);
+  const contract = new ethers.Contract(PRIVCONTRACT,PRIVABI,provider);
+  const contractpub = new ethers.Contract(PRIVCONTRACT,PRIVABI,provider);
   const [credits,setCredits] = useState(null)
+  const [creditsPub,setCreditsPub] = useState(null)
   useEffect(() => {
     async function check(){
 
         try {
             const check = await contract.userBalances(address);
+            const checkpub = await contractpub.userBalances(address);
             console.log(check)
             // @ts-ignore 
         console.log(parseInt(check._hex,16))
          // @ts-ignore 
-            setCredits(parseInt(check._hex,16))
+            setCredits(parseInt(check._hex,16)/10**18)
+            // @ts-ignore
+            setCreditsPub(parseInt(checkpub._hex,16)/10**18)
            
             
           } catch (error) {
@@ -43,7 +48,8 @@ if(address )
       </h1>:""}
       </Link>   
         <div className='flex flex-row gap-[1rem]   '>
-          {/* <div className='text-center'>credits:{credits != null ?credits:"-"}</div> */}
+          <div className='text-center'>credits private:{credits != null ?credits:"-"}</div>
+          <div className='text-center'>credits public:{creditsPub != null ?creditsPub:"-"}</div>
         <ConnectButton chainStatus="icon"/>
         </div>
     </div>
