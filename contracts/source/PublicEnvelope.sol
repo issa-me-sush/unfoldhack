@@ -71,17 +71,17 @@ contract PublicRedEnvelope is BalanceManager {
             uint256 pointsToSubtract = (loyaltyPoints[participant] * loyaltyPercentage) / 100;
             loyaltyPoints[participant] -= pointsToSubtract;
             
-            addToBalance(participant, reward);
+            
         }
 
-        addToBalance(envelope.creator, envelope.creatorReward);
+        
         emit PublicEnvelopeDistributed(envelopeId);
     }
 
     function calculateReward(address participant, uint256 envelopeId) internal view returns(uint256) {
         PublicEnvelope storage envelope = publicEnvelopes[envelopeId];
+        
         uint256 totalLoyaltyPoints = 0;
-
         for (uint256 i = 0; i < envelope.participants.length; i++) {
             totalLoyaltyPoints += loyaltyPoints[envelope.participants[i]];
         }
