@@ -10,8 +10,10 @@ contract PublicRedEnvelope is BalanceManager {
         uint256 potSize;
         uint256 entryFee;
         uint256 creatorReward;
-        mapping(address => uint256) participants;
+        mapping(address => uint256) participantsAmount;  // Mapping to track the amount each participant has contributed
+        address[] participants;  // Array to store participant addresses
         mapping(address => uint256) winners;
+        string envelopeName; // New field to store the name of the envelope
     }
 
     mapping(uint256 => PublicEnvelope) public publicEnvelopes;
@@ -25,12 +27,15 @@ contract PublicRedEnvelope is BalanceManager {
     event EnteredEnvelope(uint256 envelopeId, address participant);
     event PublicEnvelopeDistributed(uint256 envelopeId);
 
-    function createPublicEnvelope(uint256 _entryFee, uint256 _potSize) external {
+    function createPublicEnvelope(string memory _envelopeName, uint256 _potSize, uint256 _entryFee) external payable {
+        require(msg.value == _potSize, "Pot size must be sent with the transaction");
+
         PublicEnvelope storage envelope = publicEnvelopes[++currentEnvelopeId];
         envelope.creator = msg.sender;
         envelope.entryFee = _entryFee;
         envelope.potSize = _potSize;
         envelope.creatorReward = (_potSize * CREATOR_REWARD_PERCENTAGE) / 100;
+        envelope.envelopeName = _envelopeName;
 
         subtractFromBalance(msg.sender, _potSize);
         emit PublicEnvelopeCreated(currentEnvelopeId, msg.sender, _entryFee);
@@ -42,7 +47,11 @@ contract PublicRedEnvelope is BalanceManager {
 
         addToBalance(msg.sender, msg.value);
         envelope.potSize += msg.value;
-        envelope.participants[msg.sender] = msg.value;
+        envelope.participantsAmount[msg.sender] = msg.value;
+
+        if (envelope.participantsAmount[msg.sender] == msg.value) { // First-time participant
+            envelope.participants.push(msg.sender);
+        }
 
         loyaltyPoints[msg.sender] += msg.value;
         emit EnteredEnvelope(envelopeId, msg.sender);
@@ -50,13 +59,15 @@ contract PublicRedEnvelope is BalanceManager {
 
     function distributeRewards(uint256 envelopeId) external {
         PublicEnvelope storage envelope = publicEnvelopes[envelopeId];
-        require(msg.sender == envelope.creator, "Only creator can distribute rewards");
+        require(msg.sender == envelope.creator, "Only the creator can distribute rewards");
 
         uint256 totalFee = (envelope.potSize * FEE_PERCENTAGE) / 100;
         uint256 distributablePot = envelope.potSize - totalFee - envelope.creatorReward;
 
-        for(address participant : envelope.participants) {
-            uint256 reward = calculateReward(participant, distributablePot);
+        for (uint i = 0; i < envelope.participants.length; i++) {
+            address participant = envelope.participants[i];
+
+            uint256 reward = calculateReward(participant, envelopeId);
             envelope.winners[participant] = reward;
 
             // Subtract the equivalent percentage of loyalty points based on their winnings
@@ -70,22 +81,32 @@ contract PublicRedEnvelope is BalanceManager {
         addToBalance(envelope.creator, envelope.creatorReward);
         emit PublicEnvelopeDistributed(envelopeId);
     }
-		function calculateReward(address participant, uint256 envelopeId) internal view returns(uint256) {
-		    PublicEnvelope storage envelope = publicEnvelopes[envelopeId];
-		    
-		    uint256 totalLoyaltyPoints = 0;
-		    // Sum the loyalty points of all participants
-		    for (uint256 i = 0; i < envelope.participants.length; i++) {
-		        totalLoyaltyPoints += loyaltyPoints[envelope.participants[i]];
-		    }
-		    
-		    // Calculate base share
-		    uint256 baseShare = (envelope.potSize * loyaltyPoints[participant]) / totalLoyaltyPoints;
-		    
-		    // Apply random bias. For demonstration, we use a bias in the range [0.8, 1.2].
-		    uint256 randomBias = 80 + random(envelopeId) % 41;  // This gives a random number in the range [80, 120]
-		    uint256 finalReward = (baseShare * randomBias) / 100;  // Adjust the baseShare by the bias
-		
-		    return finalReward;
-		}
+
+    function getEnvelopeInfo(uint256 envelopeId) external view returns (uint256, uint256, string memory) {
+        PublicEnvelope storage envelope = publicEnvelopes[envelopeId];
+        return (envelope.entryFee, envelope.potSize, envelope.envelopeName);
+    }
+
+    function calculateReward(address participant, uint256 envelopeId) internal view returns (uint256) {
+        PublicEnvelope storage envelope = publicEnvelopes[envelopeId];
+
+        uint256 totalLoyaltyPoints = 0;
+        // Sum the loyalty points of all participants
+        for (uint256 i = 0; i < envelope.participants.length; i++) {
+            totalLoyaltyPoints += loyaltyPoints[envelope.participants[i]];
+        }
+
+        // Calculate base share
+        uint256 baseShare = (envelope.potSize * loyaltyPoints[participant]) / totalLoyaltyPoints;
+
+        // Apply random bias. For demonstration, we use a bias in the range [0.8, 1.2].
+        uint256 randomBias = 80 + random(envelopeId) % 41;  // This gives a random number in the range [80, 120]
+        uint256 finalReward = (baseShare * randomBias) / 100;  // Adjust the baseShare by the bias
+
+        return finalReward;
+    }
+
+    function random(uint256 seed) private view returns(uint256) {
+        return uint256(keccak256(abi.encodePacked(block.timestamp, seed)));
+    }
 }
